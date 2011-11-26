@@ -26,6 +26,16 @@
 			dates[4] = "2011-10-17";
 			dates[5] = "2011-10-20";
 			dates[6] = "2012-02-10";
+			
+			var notes = new Array();
+			notes[0] = "dag 0";
+			notes[1] = "dag 1";
+			notes[2] = "dag 2";
+			notes[3] = "dag 3";
+			notes[4] = "dag 4";
+			notes[5] = "dag 5";
+			notes[6] = "dag 6";
+			
 			// find limits start and end
 			var startDate = Number.MAX_VALUE;
 			var endDate = Number.MIN_VALUE;
@@ -36,8 +46,6 @@
 				tmpDate.setFullYear( d[0] );
 				tmpDate.setMonth( d[1]-1 );
 				tmpDate.setDate( d[2] );
-				 $("body").append( "<br>date : " );
-				 $("body").append( "<br>date : "+tmpDate.toDateString()+","+dates[i] );
 				var t  = tmpDate.getTime();
 				if( t > endDate ) endDate = t;
 				if( t < startDate ) startDate = t;
@@ -104,9 +112,8 @@
 				var t  = tmpDate.getTime();
 				var days = (t - startDate) / (1000*3600*24);
 				x = days * pixelsPerDay;
-				var noteString = ''+tmpDate.toDateString();
+				var noteString = notes[i];
 				 $("body").append( "<br>date : "+noteString );
-				// var xTextPosition = x-(4*pixelsPerDay);
 				if( textOffsetIndex >= textPositionOffsets.length ) textOffsetIndex = 0;
 				var textOffset = textPositionOffsets[ textOffsetIndex ];
 				var yTextPosition = yAxesPosition + textOffset;
