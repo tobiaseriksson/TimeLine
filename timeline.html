@@ -16,38 +16,41 @@
         	
 		    var paper = new Raphael(document.getElementById('canvas_container'), width, height);  
 			
+			var notes = [];
+			notes[0] = '2011-10-01:Fika paus!';
+			notes[1] = '2011-06-03:Juni fika';
+			notes[2] = '2012-02-11:Februari';
+			notes[3] = '2011-08-23:snart september';
+			notes[4] = '2011-12-14:snart jul!';
+			var sortedNotes = [];
+			for( var i = 0; i < notes.length; i++ ) {
+				$('body').append('<br>n['+i+'] = '+notes[i] );
+				sortedNotes[i] = notes[i].split( ':' );
+			}
+			// add TODAY
+			var today = new Date();
+			sortedNotes[ sortedNotes.length ] = new Array( today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(), 'Today' );
+
+			sortedNotes.sort( function(a,b) { 
+   				if( a[0] == b[0] ) return 0; 
+   				if( a[0] < b[0] ) return 1; 
+   				return -1; 
+   			}	
+   			);
+
+			for( var i = 0; i < sortedNotes.length; i++ ) {
+				$('body').append('<br>sortedNotes['+i+'] = '+sortedNotes[i] );
+			}
+			
 			var currentXPosition = 0;
 			var monthNames = [ 'Jan', 'Feb', 'Mar' ,'Apr', 'May' , 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
-			var dates = new Array();
-			dates[0] = "2011-09-02";
-			dates[1] = "2011-06-09";
-			dates[2] = "2011-10-12";
-			dates[3] = "2011-10-13";
-			dates[4] = "2011-10-17";
-			dates[5] = "2011-10-20";
-			dates[6] = "2012-02-10";
-			
-			var notes = new Array();
-			notes[0] = "dag 0";
-			notes[1] = "dag 1";
-			notes[2] = "dag 2";
-			notes[3] = "dag 3";
-			notes[4] = "dag 4";
-			notes[5] = "dag 5";
-			notes[6] = "dag 6";
-			
-			// Position TODAY
-			var today = new Date();
-			dates[ dates.length ] = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-			notes[ notes.length ] = "Today";
-			// $("body").append( "today="+dates[ dates.length-1 ] );
-			
+						
 			// find limits start and end
 			var startDate = Number.MAX_VALUE;
 			var endDate = Number.MIN_VALUE;
 			
-			for( var i = 0; i < dates.length; i++ ) {
-				var d = dates[i].split('-');
+			for( var i = 0; i < sortedNotes.length; i++ ) {
+				var d = sortedNotes[i][0].split('-');
 				var tmpDate = new Date(0);
 				tmpDate.setFullYear( d[0] );
 				tmpDate.setMonth( d[1]-1 );
@@ -107,8 +110,8 @@
 			var textOffsetIndex = 0;
 			path="";
 			var over = true;
-			for( var i = 0; i < dates.length; i++ ) {
-				var d = dates[i].split('-');
+			for( var i = 0; i < sortedNotes.length; i++ ) {
+				var d = sortedNotes[i][0].split('-');
 				var tmpDate = new Date(0);
 				tmpDate.setFullYear( d[0] );
 				tmpDate.setMonth( d[1]-1 );
@@ -116,7 +119,7 @@
 				var t  = tmpDate.getTime();
 				var days = (t - startDate) / (1000*3600*24);
 				x = days * pixelsPerDay;
-				var noteString = notes[i];
+				var noteString = sortedNotes[i][1];
 				if( textOffsetIndex >= textPositionOffsets.length ) textOffsetIndex = 0;
 				var textOffset = textPositionOffsets[ textOffsetIndex ];
 				var yTextPosition = yAxesPosition + textOffset;
@@ -158,7 +161,8 @@
 		    	currentXPosition = currentXPosition - xStep;
 		    	var t = "t"+currentXPosition+",0";
             	timeline.animate( { transform: t}, xStep, ">" );
-            });            
+            });        
+			
 		}  
         
         </script>  
