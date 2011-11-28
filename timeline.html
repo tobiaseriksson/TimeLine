@@ -15,6 +15,7 @@
         	var xStep = width / 2; // pixels left/right when clicking 
         	
 		    var paper = new Raphael(document.getElementById('canvas_container'), width, height);  
+			
 			var currentXPosition = 0;
 			var monthNames = [ 'Jan', 'Feb', 'Mar' ,'Apr', 'May' , 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 			var dates = new Array();
@@ -26,16 +27,30 @@
 			dates[5] = "2011-10-20";
 			dates[6] = "2012-02-10";
 			
+			var notes = new Array();
+			notes[0] = "dag 0";
+			notes[1] = "dag 1";
+			notes[2] = "dag 2";
+			notes[3] = "dag 3";
+			notes[4] = "dag 4";
+			notes[5] = "dag 5";
+			notes[6] = "dag 6";
+			
 			// find limits start and end
 			var startDate = Number.MAX_VALUE;
 			var endDate = Number.MIN_VALUE;
 			
-			for each ( var d in dates ) {
-				var tmpDate = new Date( d );
+			for( var i = 0; i < dates.length; i++ ) {
+				var d = dates[i].split('-');
+				var tmpDate = new Date(0);
+				tmpDate.setFullYear( d[0] );
+				tmpDate.setMonth( d[1]-1 );
+				tmpDate.setDate( d[2] );
 				var t  = tmpDate.getTime();
 				if( t > endDate ) endDate = t;
 				if( t < startDate ) startDate = t;
 			}
+			
 			// allways start on a Monday
 			var tmpDate = new Date( startDate );
 			if( tmpDate.getDay() == 0 ) {
@@ -46,9 +61,6 @@
 			endDate = endDate + (1000*3600*24*7); // plus 7 days
 				
 			var totalDays = (endDate - startDate) / (1000*3600*24);
-			
-			// console.log( "days="+totalDays );
-			 $("body").append( "days="+totalDays );
 			 
 			var timeline = paper.set();
 			var x1 = 0;
@@ -88,14 +100,16 @@
 			var textOffsetIndex = 0;
 			path="";
 			var over = true;
-			for each ( var d in dates ) {
-				var tmpDate = new Date( d );
+			for( var i = 0; i < dates.length; i++ ) {
+				var d = dates[i].split('-');
+				var tmpDate = new Date(0);
+				tmpDate.setFullYear( d[0] );
+				tmpDate.setMonth( d[1]-1 );
+				tmpDate.setDate( d[2] );
 				var t  = tmpDate.getTime();
 				var days = (t - startDate) / (1000*3600*24);
 				x = days * pixelsPerDay;
-				var noteString = ''+tmpDate.toDateString();
-				 $("body").append( "<br>date : "+noteString );
-				// var xTextPosition = x-(4*pixelsPerDay);
+				var noteString = notes[i];
 				if( textOffsetIndex >= textPositionOffsets.length ) textOffsetIndex = 0;
 				var textOffset = textPositionOffsets[ textOffsetIndex ];
 				var yTextPosition = yAxesPosition + textOffset;
@@ -108,6 +122,7 @@
 			notePaths.attr({stroke: '#f00', 'stroke-width': 1});  
 			timeline.push( notePaths );
 			
+			
 			var leftArrowPath = "M16,30.534c8.027,0,14.534-6.507,14.534-14.534c0-8.027-6.507-14.534-14.534-14.534C7.973,1.466,1.466,7.973,1.466,16C1.466,24.027,7.973,30.534,16,30.534zM18.335,6.276l3.536,3.538l-6.187,6.187l6.187,6.187l-3.536,3.537l-9.723-9.724L18.335,6.276z";
 			var leftArrow = paper.path( leftArrowPath );
 		    leftArrow.attr({ fill: "#ccc", stroke: "none" } );
@@ -115,24 +130,19 @@
 			var rightArrow = paper.path( rightArrowPath );
 		    rightArrow.attr({ fill: "#ccc", stroke: "none" } );
 		    rightArrow.transform( "t"+(width-32)+",0" );
-			//  $("body").append( "xMax="+xMax );
-		    
+			
 		    leftArrow.click(function () {
 		    	if( currentXPosition >=  xStep ) return;
 		    	currentXPosition = currentXPosition + xStep;
 		    	var t = "t"+currentXPosition+",0";
             	timeline.animate( { transform: t}, xStep, ">" );
-            	// $("body").append( "<br>t="+currentXPosition );
             });
             rightArrow.click(function () {
             	if( currentXPosition <= (2*xStep)-xMax ) return; 
 		    	currentXPosition = currentXPosition - xStep;
 		    	var t = "t"+currentXPosition+",0";
             	timeline.animate( { transform: t}, xStep, ">" );
-            	// $("body").append( "<br>t="+currentXPosition );
             });            
-                      
-		
 		}  
         
         </script>  
@@ -140,7 +150,7 @@
             #canvas_container {  
                 width: 1000px;  
                 height: 200px;
-                border: 1px solid #aaa;  
+                border: 0px solid #aaa;  
             }  
         </style>  
     </head>  
