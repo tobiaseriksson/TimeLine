@@ -19,8 +19,8 @@
 			var currentXPosition = 0;
 			var monthNames = [ 'Jan', 'Feb', 'Mar' ,'Apr', 'May' , 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 			var dates = new Array();
-			dates[0] = "2011-10-02";
-			dates[1] = "2011-10-09";
+			dates[0] = "2011-09-02";
+			dates[1] = "2011-06-09";
 			dates[2] = "2011-10-12";
 			dates[3] = "2011-10-13";
 			dates[4] = "2011-10-17";
@@ -35,6 +35,12 @@
 			notes[4] = "dag 4";
 			notes[5] = "dag 5";
 			notes[6] = "dag 6";
+			
+			// Position TODAY
+			var today = new Date();
+			dates[ dates.length ] = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			notes[ notes.length ] = "Today";
+			// $("body").append( "today="+dates[ dates.length-1 ] );
 			
 			// find limits start and end
 			var startDate = Number.MAX_VALUE;
@@ -61,7 +67,8 @@
 			endDate = endDate + (1000*3600*24*7); // plus 7 days
 				
 			var totalDays = (endDate - startDate) / (1000*3600*24);
-			 
+			
+			// Draw timeline
 			var timeline = paper.set();
 			var x1 = 0;
 			var xMax = totalDays * pixelsPerDay;
@@ -95,7 +102,7 @@
 			timelineLine.attr({stroke: '#f00', 'stroke-width': 1});  
 			timeline.push( timelineLine );
 			
-			// position the notes at the dates
+			// Position the notes at the dates
 			var textPositionOffsets = [ 0.5 * height / 2 , -0.5 * height / 2, 0.75 * height / 2, -0.75 * height / 2 ];
 			var textOffsetIndex = 0;
 			path="";
@@ -120,9 +127,9 @@
 			}
 			var notePaths = paper.path( path );
 			notePaths.attr({stroke: '#f00', 'stroke-width': 1});  
-			timeline.push( notePaths );
+			timeline.push( notePaths );	
 			
-			
+			// Left and Right arrows
 			var leftArrowPath = "M16,30.534c8.027,0,14.534-6.507,14.534-14.534c0-8.027-6.507-14.534-14.534-14.534C7.973,1.466,1.466,7.973,1.466,16C1.466,24.027,7.973,30.534,16,30.534zM18.335,6.276l3.536,3.538l-6.187,6.187l6.187,6.187l-3.536,3.537l-9.723-9.724L18.335,6.276z";
 			var leftArrow = paper.path( leftArrowPath );
 		    leftArrow.attr({ fill: "#ccc", stroke: "none" } );
@@ -131,6 +138,15 @@
 		    rightArrow.attr({ fill: "#ccc", stroke: "none" } );
 		    rightArrow.transform( "t"+(width-32)+",0" );
 			
+			// Animate to TODAY
+			var initialXMove = pixelsPerDay * ( (today.getTime()-startDate) / (1000*3600*24) );
+			currentXPosition = currentXPosition - (initialXMove - width/2);
+			if( currentXPosition >=  xStep ) currentXPosition = xStep;
+			if( currentXPosition <= (2*xStep)-xMax ) currentXPosition = (2*xStep)-xMax;
+			var t = "t"+currentXPosition+",0";
+            timeline.animate( { transform: t}, xStep, ">" );
+			
+			// Left and Right buttons
 		    leftArrow.click(function () {
 		    	if( currentXPosition >=  xStep ) return;
 		    	currentXPosition = currentXPosition + xStep;
