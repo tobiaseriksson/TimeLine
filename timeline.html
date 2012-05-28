@@ -29,12 +29,9 @@
 	        }
 	       
 	       	TimeLine.prototype.setHeadlines = function ( _arrayOfHeadlinesAndDates ) {
-	       		for( var i = 0; i < _arrayOfHeadlinesAndDates.length; i++ ) {
-					// $('body').append('<br>n['+i+'] = '+notes[i] );
-					this.sortedHeadlines[i] = _arrayOfHeadlinesAndDates[i].split( ':' );
-				}
-				// add TODAY to the list of Events
-				
+				this.sortedHeadlines = _arrayOfHeadlinesAndDates.slice(0);
+
+				// add TODAY to the list of Events				
 				this.sortedHeadlines[ this.sortedHeadlines.length ] = new Array( this.today.getFullYear()+'-'+(this.today.getMonth()+1)+'-'+this.today.getDate(), 'Today' );
 	
 				this.sortedHeadlines.sort( function(a,b) { 
@@ -44,9 +41,9 @@
 	   				}	
 	   			);
 				
-				for( var i = 0; i < this.sortedHeadlines.length; i++ ) {
-					$('body').append('<br>sortedHeadlines['+i+'] = '+this.sortedHeadlines[i] );
-				}
+				//for( var i = 0; i < this.sortedHeadlines.length; i++ ) {
+				//	$('body').append('<br>sortedHeadlines['+i+'] = '+this.sortedHeadlines[i] );
+				//}
 
 	       	}
 	       	
@@ -198,15 +195,18 @@
 			}
 		}
         window.onload = function() { 
+        
+        	var headlines = [ 
+        			['2012-01-14','januari...' ],
+        			['2012-05-06','maj!!!'] ,
+        			['2012-04-10','hmmmm...' ],
+        			['2012-06-26','juni....'] 
+        			];
+				
        	 	var t1 = new TimeLine('canvas_container',1000,100);
-       	 	var headlines = [];
-			headlines[0] = '2012-01-15:Januari!!!';
-			headlines[1] = '2012-06-03:Juni fika';
-			headlines[2] = '2012-02-11:Februari';
-			headlines[3] = '2012-05-23:skönt med maj';
-			headlines[4] = '2012-04-14:mitt i april!';
 			t1.setHeadlines( headlines );
        	 	t1.create();
+       	 	
        	 	var t1 = new TimeLine('canvas2_container',500,100);
 			t1.setHeadlines( headlines );
        	 	t1.create();
