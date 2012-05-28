@@ -207,7 +207,9 @@
 			headlines[4] = '2012-04-14:mitt i april!';
 			t1.setHeadlines( headlines );
        	 	t1.create();
-       	 	
+       	 	var t1 = new TimeLine('canvas2_container',500,100);
+			t1.setHeadlines( headlines );
+       	 	t1.create();
         }
      
         </script>  
@@ -217,7 +219,7 @@
                 height: 100px;
                 border: 0px solid #aaa;  
             } 
-            #draw_container {  
+            #canvas2_container {  
                 width: 1000px;  
                 height: 100px;
                 border: 0px solid #aaa;  
@@ -227,9 +229,9 @@
     <body>  
         <div id="canvas_container"></div>  
         <br>
-        <div id="draw_container"></div>  
+        <div id="canvas2_container"></div>  
         <br>
-        <b>Log</b>xxxxxxxx
+        <b>Log</b>
         <br>
     </body>  
 </html>  
