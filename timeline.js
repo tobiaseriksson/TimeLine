@@ -16,6 +16,7 @@
 	        this.xMax = 0;
 	        this.currentXPosition = 0;
 	        this.today = new Date();
+	        this.shallHaveEditIcon = false;
 	        
 	        TimeLine.prototype.setSize = function( _width, _height ) {
 	        	this.width = _widht;
@@ -74,7 +75,7 @@
 	       		// Position the notes at the dates
 				var textPositionOffsets = [ 0.5 * this.height / 2 , -0.5 * this.height / 2, 0.75 * this.height / 2, -0.75 * this.height / 2 ];
 				var textOffsetIndex = 0;
-				var path="";
+				path="";
 				var over = true;
 				for( var i = 0; i < this.sortedHeadlines.length; i++ ) {
 					var d = this.sortedHeadlines[i][0].split('-');
@@ -84,7 +85,7 @@
 					tmpDate.setDate( d[2] );
 					var t  = tmpDate.getTime();
 					var days = (t - this.startDate) / (1000*3600*24);
-					var x = days * this.pixelsPerDay;
+					x = days * this.pixelsPerDay;
 					var noteString = this.sortedHeadlines[i][1];
 					if( textOffsetIndex >= textPositionOffsets.length ) textOffsetIndex = 0;
 					var textOffset = textPositionOffsets[ textOffsetIndex ];
@@ -185,7 +186,22 @@
 			    this.drawLine();
 			    this.drawNotes();
 			    this.drawLeftRightArrow();
+			    if( this.shallHaveEditIcon == true ) this.drawEditIcon();
 			    this.animateToToday();
+			}
+			TimeLine.prototype.drawEditIcon = function() {
+				var editIconPath = "M16,1.466C7.973,1.466,1.466,7.973,1.466,16c0,8.027,6.507,14.534,14.534,14.534c8.027,0,14.534-6.507,14.534-14.534C30.534,7.973,24.027,1.466,16,1.466zM24.386,14.968c-1.451,1.669-3.706,2.221-5.685,1.586l-7.188,8.266c-0.766,0.88-2.099,0.97-2.979,0.205s-0.973-2.099-0.208-2.979l7.198-8.275c-0.893-1.865-0.657-4.164,0.787-5.824c1.367-1.575,3.453-2.151,5.348-1.674l-2.754,3.212l0.901,2.621l2.722,0.529l2.761-3.22C26.037,11.229,25.762,13.387,24.386,14.968z";
+				var editIcon = this.paper.path( editIconPath );
+		    	editIcon.attr({ fill: "#ccc", stroke: "none" } );
+		    	editIcon.transform( "t"+(this.width-32)+","+(this.height-32) );
+				editIcon.click(function () {
+            		window.location = this.editHeadlinesUrl;
+            	}.bind(this)); 
+			}
+			
+			TimeLine.prototype.setEditIconURL = function( _editHeadlinesUrl ) {
+				this.editHeadlinesUrl = _editHeadlinesUrl;
+				this.shallHaveEditIcon = true;
 			}
 		}
 		
