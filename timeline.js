@@ -74,7 +74,7 @@
 	       		// Position the notes at the dates
 				var textPositionOffsets = [ 0.5 * this.height / 2 , -0.5 * this.height / 2, 0.75 * this.height / 2, -0.75 * this.height / 2 ];
 				var textOffsetIndex = 0;
-				path="";
+				var path="";
 				var over = true;
 				for( var i = 0; i < this.sortedHeadlines.length; i++ ) {
 					var d = this.sortedHeadlines[i][0].split('-');
@@ -84,7 +84,7 @@
 					tmpDate.setDate( d[2] );
 					var t  = tmpDate.getTime();
 					var days = (t - this.startDate) / (1000*3600*24);
-					x = days * this.pixelsPerDay;
+					var x = days * this.pixelsPerDay;
 					var noteString = this.sortedHeadlines[i][1];
 					if( textOffsetIndex >= textPositionOffsets.length ) textOffsetIndex = 0;
 					var textOffset = textPositionOffsets[ textOffsetIndex ];
